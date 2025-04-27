@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "react-frontend.fullname" . }}
+  labels:
+    app: {{ include "react-frontend.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "react-frontend.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "react-frontend.name" . }}
+    spec:
+      containers:
+        - name: react
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 80

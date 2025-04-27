@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: springboot
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+scala:
+  host: scala
+  port: 8082
+
+serviceAccount:
+  create: true
+  name: ""
+  automount: true
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  hosts:
+    - host: api.local
+      paths:
+        - path: /?(.*)
+          pathType: ImplementationSpecific
+
+autoscaling:
+  enabled: false

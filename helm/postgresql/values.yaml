@@ -1,0 +1,40 @@
+image:
+  repository: postgres
+  tag: "15"
+  pullPolicy: IfNotPresent
+
+postgresUser: postgres
+postgresPassword: postgres
+postgresDatabase: postgres
+
+service:
+  type: ClusterIP
+  port: 5432
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  mountPath: /var/lib/postgresql/data
+  storageClass: standard  # Empty = use the default storage class in Minikube
+
+resources: {}
+
+livenessProbe:
+  enabled: true
+  exec:
+    command: ["pg_isready", "-U", "postgres"]
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 30
+  failureThreshold: 5
+
+serviceAccount:
+  create: true
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false

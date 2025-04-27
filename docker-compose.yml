@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+  fastapi:
+    build:
+      context: ./backend/FastAPI/web-summarizer-fastapi
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  scala:
+    build:
+      context: ./backend/Scala/WebsiteSummarizer
+    container_name: scala
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      fastapi:
+        condition: service_started
+
+  springboot:
+    build:
+      context: ./backend/Springboot/WebSummarizer
+    container_name: springboot
+    ports:
+      - "8800:8080"
+    depends_on:
+      - scala
+
+  react:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:80"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - springboot
+
+volumes:
+  pgdata:

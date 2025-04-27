@@ -1,0 +1,24 @@
+image:
+  repository: react-frontend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  hosts:
+    - host: web.summarizer
+      paths:
+        - path: /?(.*)
+          pathType: ImplementationSpecific
+
+serviceAccount:
+  create: true
+  name: ""
+  automount: true

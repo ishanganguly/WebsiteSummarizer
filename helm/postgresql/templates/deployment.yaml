@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-postgres
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresUser | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgresPassword | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresDatabase | quote }}
+          volumeMounts:
+            - name: pgdata
+              mountPath: {{ .Values.persistence.mountPath }}
+          livenessProbe:
+            exec:
+              command: {{- toYaml .Values.livenessProbe.exec.command | nindent 14 }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-postgres-pvc

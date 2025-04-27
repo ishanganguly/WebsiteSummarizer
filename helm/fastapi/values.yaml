@@ -1,0 +1,47 @@
+# helm/fastapi/values.yaml
+
+image:
+  repository: fastapi
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# No persistence needed for FastAPI
+# No ingress by default
+ingress:
+  enabled: false
+
+resources: {}
+
+# Liveness / readiness can hit the docs endpoint
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /docs
+    port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /docs
+    port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+serviceAccount:
+  create: true
+  name: ""
+
+autoscaling:
+  enabled: false

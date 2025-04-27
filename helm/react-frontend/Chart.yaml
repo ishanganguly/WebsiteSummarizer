@@ -1,0 +1,5 @@
+apiVersion: v2
+name: react-frontend
+description: React frontend served via nginx
+version: 0.1.0
+
