@@ -105,11 +105,12 @@ Each service runs in its own container and can be deployed using Helm charts in 
 
 **Table Schema**:
 ```sql
-CREATE TABLE summarize_logs (
-    id SERIAL PRIMARY KEY,
-    url VARCHAR(255) NOT NULL,
-    summary TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE request_history (
+        id SERIAL PRIMARY KEY,
+        url VARCHAR(255) NOT NULL,
+        summary TEXT NOT NULL,
+        timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+	user_id VARCHAR(255) NOT NULL
 );
 
 ```
@@ -216,11 +217,12 @@ c. Connect to the `summarize` database:
 d. Create the `summarizer_logs` table with the following SQL:
 
 ```sql
-    CREATE TABLE summarizer_logs (
+    CREATE TABLE request_history (
         id SERIAL PRIMARY KEY,
         url VARCHAR(255) NOT NULL,
         summary TEXT NOT NULL,
-        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+        timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+	user_id VARCHAR(255) NOT NULL
     );
 ```
 Example of configuration in a `application.conf` file of the scala library:
