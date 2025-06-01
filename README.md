@@ -44,6 +44,14 @@ Each service runs in its own container and can be deployed using Helm charts in 
 
 ---
 
+## 💻⏯️Working Walkthrough
+- [Click here for the working demo](https://drive.google.com/file/d/1qLfTvF9H9VkrJ4ohNXZZdoTUVn0SGDjI/view?usp=drive_link)
+- [Click here for the code walthrough](https://drive.google.com/file/d/1qLfTvF9H9VkrJ4ohNXZZdoTUVn0SGDjI/view?usp=drive_link)
+- [Get the project](https://drive.google.com/drive/folders/1hPGLqPMOYvcksMcrUn6rI7Z5fCyfSTyF?usp=drive_link)
+
+
+---
+
 ## 🧱 Components
 
 ### 1. 📦 Spring Boot API Gateway
@@ -230,10 +238,10 @@ db {
 ### 2. **Run Python FastAPI**
 
 a. Navigate to the `./Backend/FastAPI/web-summarizer-fastapi` directory.
-b. Create a `.env` file and add your Hugging Face API key in the following format:
+b. Create a `.env` file and add your Llama3 AI model key in the following format:
 
 ```env
-   "LLAMA3_API_KEY=your_llama3_api_key" 
+   "GROQ_API_KEY=your_groq_api_key" 
 ```
 c. Run the FastAPI server with the following command:
 
